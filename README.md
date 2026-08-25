@@ -6,3 +6,6 @@ La navegación SPA se implementó mediante Vue Router (`router/index.js`)..
 Se creó el componente reutilizable `ProductCard.vue` encargado de estructurar y visualizar la información de un producto individual.
 Se definió una lista de 6 productos pertenecientes a distintas comunas de la Región de Ñuble.
 La vista `productos.vue` envía la información correspondiente a cada producto
+## Parte C - Listas y condicionales
+Se implementó `v-for` conectada a un arreglo `listaProductos`.
+Con las directivas `v-if` y `v-else`, el sistema renderiza la lista filtrada o muestra un mensaje de advertencia indicando que no hay productos disponibles si no se cumplen las condiciones.

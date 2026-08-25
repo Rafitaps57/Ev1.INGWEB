@@ -2,7 +2,6 @@
 import { ref, computed } from 'vue'
 import ProductCard from '../components/ProductoCarta.vue'
 
-// PARTE C: Agregamos la propiedad 'disponible'
 const listaProductos = ref([
   { id: 1, nombre: 'Miel Multifloral Orgánica', categoria: 'Alimentos', productor: 'Apícola Los Lleuques', comuna: 'Pinto', precio: 6500, disponible: true },
   { id: 2, nombre: 'Vino Pipeño Tradicional', categoria: 'Bebidas', productor: 'Viña Viejas Cepas', comuna: 'Portezuelo', precio: 4500, disponible: true },
@@ -12,16 +11,20 @@ const listaProductos = ref([
   { id: 6, nombre: 'Mermelada Artesanal de Cereza', categoria: 'Conservas', productor: 'SABORES de Bulnes', comuna: 'Bulnes', precio: 3800, disponible: false }
 ])
 
-// PARTE C: Reactividad para filtrado
 const soloDisponibles = ref(false)
 
-// Propiedad computada para filtrar la lista dinámicamente
+const mensajeInteres = ref('')
+
 const productosFiltrados = computed(() => {
   if (soloDisponibles.value) {
     return listaProductos.value.filter(prod => prod.disponible)
   }
   return listaProductos.value
 })
+
+const procesarInteres = (producto) => {
+  mensajeInteres.value = `¡Has manifestado interés por "${producto.nombre}" (${producto.comuna})! Nos comunicaremos con el productor ${producto.productor}.`
+}
 </script>
 
 <template>
@@ -29,7 +32,10 @@ const productosFiltrados = computed(() => {
     <h2>Catálogo de Productos de Ñuble</h2>
     <p>Conoce la oferta local directo de los productores de la región.</p>
 
-    <!-- PARTE C: Control para alterar lo que ve el usuario -->
+    <div v-if="mensajeInteres" class="alerta-confirmacion">
+      {{ mensajeInteres }}
+    </div>
+
     <div class="panel-filtros">
       <label class="checkbox-label">
         <input type="checkbox" v-model="soloDisponibles" />
@@ -37,16 +43,15 @@ const productosFiltrados = computed(() => {
       </label>
     </div>
 
-    <!-- PARTE C: Evaluación condicional v-if / v-else -->
     <div v-if="productosFiltrados.length > 0" class="grid-productos">
       <ProductCard 
         v-for="prod in productosFiltrados" 
         :key="prod.id" 
         :producto="prod" 
+        @notificar-interes="procesarInteres"
       />
     </div>
 
-    <!-- Mensaje cuando la condición no permita mostrar información -->
     <div v-else class="mensaje-vacio">
       <p>⚠️ No hay productos disponibles con el criterio seleccionado en este momento.</p>
     </div>
@@ -90,5 +95,15 @@ const productosFiltrados = computed(() => {
   border: 1px solid #ffeeba;
   border-radius: 8px;
   font-size: 1.1rem;
+}
+
+.alerta-confirmacion {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
 }
 </style>

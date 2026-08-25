@@ -1,10 +1,16 @@
 <script setup>
-defineProps({
+const props = defineProps({
   producto: {
     type: Object,
     required: true
   }
 })
+
+const emit = defineEmits(['notificar-interes'])
+
+const manifestarInteres = () => {
+  emit('notificar-interes', props.producto)
+}
 </script>
 
 <template>
@@ -18,13 +24,20 @@ defineProps({
     <p class="productor"><strong>Productor:</strong> {{ producto.productor }}</p>
     <p class="precio">${{ producto.precio.toLocaleString('es-CL') }}</p>
 
-    <!-- PARTE C: Directiva condicional v-if / v-else -->
     <div v-if="producto.disponible" class="estado disponible">
       ✓ Disponible en stock
     </div>
     <div v-else class="estado agotado">
       ✕ Agotado temporalmente
     </div>
+
+    <button 
+      class="btn-interes" 
+      :disabled="!producto.disponible"
+      @click="manifestarInteres"
+    >
+      {{ producto.disponible ? 'Manifestar Interés' : 'Sin Stock' }}
+    </button>
   </div>
 </template>
 
@@ -92,4 +105,25 @@ h3 {
 
 .disponible { color: #27ae60; }
 .agotado { color: #c0392b; }
+
+.btn-interes {
+  margin-top: 1rem;
+  padding: 0.6rem 1rem;
+  background-color: #42b983;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-interes:hover:not(:disabled) {
+  background-color: #369f6e;
+}
+
+.btn-interes:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
 </style>

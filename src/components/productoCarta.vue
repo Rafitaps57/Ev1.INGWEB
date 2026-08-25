@@ -8,14 +8,23 @@ defineProps({
 </script>
 
 <template>
-  <div class="product-card">
+  <div class="product-card" :class="{ 'sin-stock': !producto.disponible }">
     <div class="card-header">
       <span class="comuna-badge">{{ producto.comuna }}</span>
       <span class="categoria-tag">{{ producto.categoria }}</span>
     </div>
+    
     <h3>{{ producto.nombre }}</h3>
     <p class="productor"><strong>Productor:</strong> {{ producto.productor }}</p>
     <p class="precio">${{ producto.precio.toLocaleString('es-CL') }}</p>
+
+    <!-- PARTE C: Directiva condicional v-if / v-else -->
+    <div v-if="producto.disponible" class="estado disponible">
+      ✓ Disponible en stock
+    </div>
+    <div v-else class="estado agotado">
+      ✕ Agotado temporalmente
+    </div>
   </div>
 </template>
 
@@ -29,6 +38,11 @@ defineProps({
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.product-card.sin-stock {
+  opacity: 0.65;
+  background-color: #f9f9f9;
 }
 
 .card-header {
@@ -69,4 +83,13 @@ h3 {
   color: #27ae60;
   margin-top: 0.8rem;
 }
+
+.estado {
+  font-weight: bold;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.disponible { color: #27ae60; }
+.agotado { color: #c0392b; }
 </style>
